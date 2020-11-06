@@ -1,0 +1,112 @@
+---
+title: "2020 US Presidential Election Vote Turnout (http://www.electproject.org/2020g)"
+author: "Sergio Aquino"
+date: "05/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Libraries and Data
+
+```{r }
+
+library(tidyverse)
+library(gsheet)
+library(janitor)
+library(gt)
+
+turnout <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1h_2pR1pq8s_I5buZ5agXS9q1vLziECztN2uWeR6Czo0/edit#gid=2030096602') 
+turnout
+
+```
+
+## Clean up dataframe
+
+
+```{r }
+
+colnames(turnout) <- turnout[1,]
+turnout <- turnout[-1,] 
+
+names(turnout)[1] <- "state"
+
+turnout.clean <- turnout %>%
+  filter(state != 'United States') %>% 
+  clean_names() %>% 
+  select(1, 13, 3, 5, 4)
+
+```
+
+
+## The mean VEP turnout rate was 67.9% (preliminary)
+
+```{r}
+
+turnout.clean %>%
+  summarize(mean=round(mean(parse_number(vep_turnout_rate)),1), sd=round(sd(parse_number(vep_turnout_rate)),1), 
+            min=min(parse_number(vep_turnout_rate)),
+            max=max(parse_number(vep_turnout_rate)))
+            
+```
+
+
+## States with highest turnout (turnout estimete/ voting eligible population (vep))
+
+```{r}
+
+turnout.clean %>% 
+  ggplot(aes(parse_number(vep_turnout_rate))) +
+  geom_histogram(bins = 25) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1, accuracy = 1)) +
+  labs(title = "Preliminary 2020 US Presidential Election Vote Turnout", 
+       subtitle = "Source: www.electproject.org/2020g on Nov 5, 2020",
+        x = 'Vote Turnout',
+        y = "Number of States"
+       ) +
+  theme_light()
+
+```
+
+
+## Top 5 states with highest and lowest turnout rate
+
+```{r}
+
+turnout.clean %>% 
+  slice_max(vep_turnout_rate, n = 5) %>% 
+  select(state, vep_turnout_rate)
+
+turnout.clean %>% 
+  slice_min(vep_turnout_rate, n = 5) %>% 
+  select(state, vep_turnout_rate)
+
+```
+
+## Order states accoring to 
+
+```{r}
+
+turnout.clean %>% 
+  arrange(desc(vep_turnout_rate)) %>% 
+  select(state, turnout_estimate, voting_eligible_population_vep, vep_turnout_rate) %>% 
+  gt() %>%
+  tab_header(
+    title = md("**Preliminary 2020 US Presidential Election Vote Turnout**")
+  ) %>% 
+ tab_footnote(
+    footnote = "Source: www.electproject.org/2020g on Nov 5, 2020",
+    locations = cells_body(
+      columns = vars(vep_turnout_rate),
+      rows = 3:4)
+  ) 
+
+```
+
+
+
+
+
