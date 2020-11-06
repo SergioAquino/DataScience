@@ -1,0 +1,226 @@
+---
+title: "James Bond Films from Dr. No to Spectre"
+subtitle: "Kaggle and Andrew Block's dataset."
+author: "Sergio Aquino"
+date: "01/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(scales)
+library(janitor)
+library(patchwork)
+library(here)
+```
+
+## Import Data
+
+```{r }
+bond <- read_csv(here('James Bond Films','Data', 'jamesbond.csv')) %>% 
+clean_names()
+
+
+dim(bond) # [24,27]
+glimpse(bond)
+names(bond)
+```
+
+## How many films did each actor star?
+
+```{r}
+
+bond %>% 
+  count(bond, sort = T)
+
+```
+
+
+## Film IMDB scores and actors
+
+```{r}
+
+bond %>% 
+  group_by(bond) %>% 
+  summarize(mean=round(mean(avg_user_imdb),1),
+            sd=round(sd(avg_user_imdb),1)) %>% 
+  arrange(-mean)
+
+```
+
+
+## James Bond directors
+
+```{r}
+
+bond %>% 
+  count(director, sort = T)
+
+bond %>% 
+  select(year, movie, bond, director)
+
+```
+
+## Composer, Writer, Cinematographer
+
+```{r}
+
+bond %>% 
+  count(composer, sort = T)
+
+writer <- bond %>% 
+  mutate_if(is.character, 
+            str_replace_all, pattern = c("& | and"), replacement = ',') %>%
+  select(writer) %>% 
+  separate(writer, into = c("a1", "a2", "a3","a4"), sep = ",") %>% 
+  pivot_longer(
+    cols = starts_with("a"),
+    names_to = "column",
+    values_to = "writer",
+    values_drop_na = TRUE
+  ) %>% 
+mutate(writer = str_trim(writer)) %>% 
+count(writer, sort = T) 
+writer
+
+bond %>% 
+  count(cinematographer, sort = T)
+
+```
+
+## IMBD ratings from Dr. No to Spectre 
+
+```{r pressure, echo=FALSE}
+
+bond %>% 
+ggplot(mapping = aes(year, avg_user_imdb)) +
+geom_point(data = bond) +
+geom_text(data = bond, aes(label = movie), size = 4, vjust = 1, hjust = 1, nudge_x = .8, nudge_y = .05) +
+   geom_line(aes(year, avg_user_imdb)) + 
+  scale_fill_manual(values = c("blue", "red")) +
+  xlab("") + 
+  ylab("ratings") +
+  geom_vline(
+    aes(xintercept = year), 
+    data = bond,
+    colour = "grey50", alpha = 0.5
+  ) +
+  labs(
+  title = "James Bond Movies IMBD Ratings",
+  caption = "James Bond Kaggle Dataset"
+)
+  
+
+```
+
+## Bond car manufacturer, release year and actors
+
+```{r}
+
+bond %>% 
+  count(bond_car_mfg, sort = T)
+
+bond %>% 
+  select(year, bond, bond_car_mfg) %>% 
+  arrange(-year)
+
+```
+
+
+## Depicted film location
+
+```{r}
+
+depicted_loc <- bond %>% 
+  mutate_if(is.character, 
+            str_replace_all, c("England" = "United Kingdom", "Great Britain" = "United Kingdom")) %>%
+  select(depicted_film_loc) %>% 
+  separate(depicted_film_loc, into = c("a1", "a2", "a3","a4","a5", "a6", "a7","a8","a9"), sep = ",") %>% 
+  pivot_longer(
+    cols = starts_with("a"),
+    names_to = "column",
+    values_to = "location",
+    values_drop_na = TRUE
+  ) %>% 
+mutate(location = str_trim(location)) %>% 
+count(location, sort = T) 
+depicted_loc
+
+```
+
+## Bond girls nationality
+
+```{r}
+
+girls_nat <- bond %>% 
+  select(bond_girl_nat) %>% 
+  separate(bond_girl_nat, into = c("a1", "a2", "a3","a4"), sep = ",") %>% 
+  pivot_longer(
+    cols = starts_with("a"),
+    names_to = "column",
+    values_to = "nationality",
+    values_drop_na = TRUE
+  ) %>% 
+  mutate(nationality = str_trim(nationality)) %>% 
+  count(nationality, sort = T) 
+girls_nat 
+
+```
+
+## Is the mean difference between IMDB and Rotten Tomatoes ratings equal to 0. No.
+
+```{r}
+p1 <- bond %>% 
+  ggplot(aes(avg_user_imdb)) +
+  geom_histogram(bins = 9)
+
+p2 <- bond %>% 
+  ggplot(aes(avg_user_rtn_tom)) +
+  geom_histogram(bins = 9)
+
+bond_longer <- bond %>%
+  pivot_longer(avg_user_imdb:avg_user_rtn_tom, names_to = "ratings", values_to = "values") %>% 
+  select(ratings, values) 
+  
+p3 <-  bond_longer %>% 
+  ggplot(aes(ratings, values)) +
+  geom_boxplot()
+
+(p1 | p2 | p3)
+```
+
+```{r}
+bond %>% 
+  summarize(avg_imdb = mean(avg_user_imdb),
+            sd_imdb = sd(avg_user_imdb),
+            avg_rtn = mean(avg_user_rtn_tom),
+            sd_rtn = sd(avg_user_rtn_tom))
+
+```
+
+
+```{r}
+
+t.test(values ~ ratings, data = bond_longer, paired = TRUE)
+
+```
+
+
+## Can IMDB ratings be predicted by violence, adjusted budget, number of girls per film, and film length
+
+No, the correlation between IMDB ratings and the above variables is low.
+
+```{r}
+
+# create number of bond girls per film column 
+library(stringi)
+bond$bond_girl_film <- sapply(stri_extract_all_regex(bond$bond_girl_nat, "([^,]+)"), function(x) length(unique(x)))
+
+bond_numeric <- dplyr::select_if(bond,is.numeric) %>% 
+  select(budget_adj,film_length,avg_user_imdb,kills_bond,kills_others, bond_girl_film)
+
+cor(bond_numeric) 
+
+```
