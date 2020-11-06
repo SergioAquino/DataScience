@@ -42,7 +42,7 @@ turnout.clean <- turnout %>%
 ```
 
 
-## The mean VEP turnout rate was 67.9% (preliminary)
+## The mean VEP turnout rate was 67.8% (preliminary)
 
 ```{r}
 
@@ -86,7 +86,7 @@ turnout.clean %>%
 
 ```
 
-## Order states accoring to 
+## Order states according to turnout
 
 ```{r}
 
@@ -107,6 +107,32 @@ turnout.clean %>%
 ```
 
 
+## Which region had the highest turnout?
+
+```{r}
+
+regions <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1WGR67tHxRMUxePUHK2vLm-HYCtjh14Tu_auo6BPOffo/edit#gid=0') %>% 
+  clean_names() %>% 
+  rename(state_abv=state_code)
+
+turnout.clean %>% 
+  left_join(regions, by = c('state','state_abv')) %>% 
+  group_by(region) %>% 
+  summarize(mean=round(mean(parse_number(vep_turnout_rate)),1),       sd=round(sd(parse_number(vep_turnout_rate)),1), 
+            min=min(parse_number(vep_turnout_rate)),
+            max=max(parse_number(vep_turnout_rate))) %>% 
+ gt() %>%
+  tab_header(
+    title = md("**Preliminary 2020 US Presidential Election Vote Turnout**")
+  ) %>% 
+ tab_footnote(
+    footnote = "Source: www.electproject.org/2020g on Nov 5, 2020",
+    locations = cells_body(
+      columns = vars(mean,sd,min,max),
+      rows = 1:4)
+  ) 
+
+```
 
 
 
