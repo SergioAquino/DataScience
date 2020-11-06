@@ -1,2 +1,2 @@
 # DataScience
-Analysing interesting datasets.
+Learning from interesting datasets.
