@@ -1,0 +1,98 @@
+---
+title: "Newspaper Stand"
+editor: visual
+format:
+  html:
+    theme: darkly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Reading headlines
+
+Does reading headlines from different newspapers give me a better sense of what's happening in the world than reading a few?
+
+My goal is to spend as little time as possible navigating between newspapers. 
+
+The most basic use of news scraping is to read headlines only. 
+ 
+There is an assumption that you read newspapers.
+
+## Libraries
+
+```{r}
+
+# install.packages("ralger") 
+
+library(tidyverse)
+library(ralger)
+```
+
+The ralger packager simplifies rvest. I used SelectorGadget to identify the html nodes I needed to grab from each newspaper page.
+
+Deciding which newspaper headlines to read is hard.
+
+## Wall Street Journal
+
+```{r}
+my_link <- "https://wsj.com"
+my_node <- ".WSJTheme--headlineText--He1ANr9C" # The element ID , I recommend SelectorGadget if you're not familiar with CSS selectors
+clean <- TRUE # Should the functionbest clean the extracted vector or not ? Default is FALSE
+(wsj <- scrap(link = my_link, node = my_node, clean = clean))
+```
+
+## New York Times
+
+```{r}
+my_link <- "https://www.nytimes.com/section/todayspaper?redirect_uri=https%3A%2F%2Fwww.nytimes.com%2F"
+my_node <- ".e1b0gigc0 , .e1hr934v1" 
+clean <- TRUE 
+(nytimes <- scrap(link = my_link, node = my_node, clean = clean))
+#nytimes <- as.data.frame(nytimes)
+#View(nytimes)
+```
+
+## Financial Times
+
+```{r}
+my_link <- "https://ft.com"
+my_node <- ".headline--scale-3 , .stacked-secondary-story--row-stack-2 .headline--scale-2 , .text--weight-400 , .headline--scale-7" 
+clean <- TRUE 
+(ft <- scrap(link = my_link, node = my_node, clean = clean))
+```
+
+## Globe and Mail
+
+```{r}
+my_link <- "https://www.theglobeandmail.com/canada/"
+my_node <- ".c-card__hed" 
+clean <- TRUE 
+(globeandmail <- scrap(link = my_link, node = my_node, clean = clean))
+```
+
+## Vancouver Sun
+
+```{r}
+my_link <- "https://vancouversun.com/"
+my_node <- ".article-card__headline-clamp" # The element ID , I recommend SelectorGadget if you're not familiar with CSS selectors
+clean <- TRUE # Should the functionbest clean the extracted vector or not ? Default is FALSE
+(vancouversun <- scrap(link = my_link, node = my_node, clean = clean))
+
+```
+
+## Financial Post
+
+```{r}
+my_link <- "https://financialpost.com/category/news/"
+my_node <- ".article-card__headline-clamp" 
+clean <- TRUE 
+(financialpost <- scrap(link = my_link, node = my_node, clean = clean))
+```
+
+Yes, reading headlines from various newspapers gives me a very good sense of what's happening around the world. It also helps me identify which news I should look into further when I open a newspaper website. 
+
+"Early in life I had noticed that no event is ever correctly reported in a newspaper."
+George Orwell
+

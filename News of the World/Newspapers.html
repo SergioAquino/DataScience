@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Newspaper Stand</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="Newspapers_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Newspapers_files/libs/quarto-html/quarto.js"></script>
+<script src="Newspapers_files/libs/quarto-html/popper.min.js"></script>
+<script src="Newspapers_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Newspapers_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Newspapers_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Newspapers_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Newspapers_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Newspapers_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Newspapers_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Newspaper Stand</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="reading-headlines" class="level2">
+<h2 class="anchored" data-anchor-id="reading-headlines">Reading headlines</h2>
+<p>Does reading headlines from different newspapers give me a better sense of what’s happening in the world than reading a few?</p>
+<p>My goal is to spend as little time as possible navigating between newspapers.</p>
+<p>The most basic use of news scraping is to read headlines only.</p>
+<p>There is an assumption that you read newspapers.</p>
+</section>
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ralger") </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.2.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.8     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.1
+✔ readr   2.1.2     ✔ forcats 0.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.2.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ralger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ralger' was built under R version 4.2.1</code></pre>
+</div>
+</div>
+<p>The ralger packager simplifies rvest. I used SelectorGadget to identify the html nodes I needed to grab from each newspaper page.</p>
+<p>Deciding which newspaper headlines to read is hard.</p>
+</section>
+<section id="wall-street-journal" class="level2">
+<h2 class="anchored" data-anchor-id="wall-street-journal">Wall Street Journal</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://wsj.com"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".WSJTheme--headlineText--He1ANr9C"</span> <span class="co"># The element ID , I recommend SelectorGadget if you're not familiar with CSS selectors</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># Should the functionbest clean the extracted vector or not ? Default is FALSE</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>(wsj <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Russia Withdraws More Forces From Ukraine"                                                                                                   
+ [2] "Ukraine Signals Major Weapons Request for Long-Term Offensive"                                                                               
+ [3] "King Charles Leads Procession in Edinburgh to Mourn Queen Elizabeth"                                                                         
+ [4] "Goldman Sachs Plans to Cut Hundreds of Jobs"                                                                                                 
+ [5] "Freight Railroads Plan to Halt Hazmat Transport as Risk of Work Stoppage Looms"                                                              
+ [6] "Stocks Climb; Dow Adds 200 Points"                                                                                                           
+ [7] "Trump Lawyers Dispute Classified Status of Seized Documents"                                                                                 
+ [8] "Instagram Stumbles in Push to Mimic TikTok, Internal Documents ShowLong read"                                                                
+ [9] "iOS 16 Is Here—Give Your iPhone a Makeover6 min read"                                                                                        
+[10] "New Cancer Drug Beats Chemotherapy in Study3 min read"                                                                                       
+[11] "California Offshore Wind Projects Face Hurdles6 min read"                                                                                    
+[12] "Cannabis Set to Stay On World Anti-Doping Agency Prohibited List6 min read"                                                                  
+[13] "Kourtney Kardashian Barker Takes on GummiesLong read"                                                                                        
+[14] "Who’ll Take the Plants? A Dilemma for People Moving Abroad.5 min read"                                                                       
+[15] "Covid-19 Keeps at Least 500,000 Workers Out of U.S. Labor Force"                                                                             
+[16] "A Bad Year for Crypto Is a Really Bad One for Crypto Miners"                                                                                 
+[17] "Wells Fargo to Pay $145 Million to Settle 401(k) Plan Probe"                                                                                 
+[18] "Finance Chiefs Struggle to Set Guidance as Economy Flashes Mixed Signals"                                                                    
+[19] "New Starbucks CEO to Learn Role Alongside Schultz"                                                                                           
+[20] "New Hampshire Primaries End With GOP Battle for Senate Nomination"                                                                           
+[21] "Former MLB Pitcher Who Became a Police Officer Killed in Car Crash On Way to 9/11 Ceremony"                                                  
+[22] "Hilton Boutique Brand to Make Debut on Broadway, as Times Square Revives"                                                                    
+[23] "Soaring Food Prices in Brazil Lead Many to Take Up Urban Farming"                                                                            
+[24] "For Every Vacation-Home Fantasy, There Is a Harsh Financial Reality"                                                                         
+[25] "How Much Can You Spend in Retirement? Answer These Questions First."                                                                         
+[26] "Should I Get New Covid Booster Now or Wait?"                                                                                                 
+[27] "‘The Rise of the Rest’ Review: Startups Across America"                                                                                      
+[28] "What Makes the Pool of Emmy Nominees So Shallow?"                                                                                            
+[29] "If You’re a Foodie, You’ll Want This Cash Back Card"                                                                                         
+[30] "The 4 Best Budgeting Apps to Get Your Finances in Order"                                                                                     
+[31] "Is a High-End Coffee Maker Worth It? We Did the Math."                                                                                       
+[32] "Some RadioShack Dealers Aren’t Happy as the Brand Leans on NSFW Tweets7 min read"                                                            
+[33] "EV Charging-Station Operators Set to Battle for Ad Dollars5 min read"                                                                        
+[34] "Restaurants Send More Customer Calls to Voice Bots Amid Staffing Shortages5 min read"                                                        
+[35] "Walgreens Names Hsiao Wang as Next CIO2 min read"                                                                                            
+[36] "‘Predictive-Maintenance’ Tech Is Taking Off as Manufacturers Seek More Efficiency4 min read"                                                 
+[37] "Tech Companies Say Going Private Comes With Benefits4 min read"                                                                              
+[38] "Shopify Hires Morgan Stanley Investment Banker as Its Next CFO2 min read"                                                                    
+[39] "DSW Shoe Store Parent Leans on Deal Making to Boost Sales of Brands It Owns4 min read"                                                       
+[40] "Grab Zeroes In on Costs as Super App Looks to Cut Losses4 min read"                                                                          
+[41] "U.S. Sanctions Iranian Intelligence Ministry, Its Leader Over Hacks1 min read"                                                               
+[42] "Crypto Complaints Not Deterring SEC Enforcement Approach, Official Says3 min read"                                                           
+[43] "The Morning Risk Report1 min read"                                                                                                           
+[44] "Amazon Refines Delivery Operations as It Resets Logistics Network3 min read"                                                                 
+[45] "Today’s Logistics Report: Amazon Resetting Logistics; Farm Shipments Dry Up; Charred Rice Production1 min read"                              
+[46] "Amazon Buys Warehouse Robotics Company Cloostermans2 min read"                                                                               
+[47] "Fashion Firms Look to Single-Fiber Clothes as EU Regulations Loom4 min read"                                                                 
+[48] "Solvay to Cut Waste From Soda-Ash Plant in Italy After Criticism2 min read"                                                                  
+[49] "Brazil Is Planning a Formal Carbon Market. Getting There Won’t Be Easy6 min read"                                                            
+[50] "Losing Weight Is Losing Ground in the Stock Market4 min read"                                                                                
+[51] "American Tech Can’t Catch a Break in India2 min read"                                                                                        
+[52] "London Looks to Un-Meme the SPAC Market 3 min read"                                                                                          
+[53] "Cathie Wood Says Falling Car Prices Could Mean Trouble3 min read"                                                                            
+[54] "China's Economy Needs More Stimulus. Beijing's Room for Maneuver Is Limited.5 min read"                                                      
+[55] "Lucid Gets a New Buy Rating. Beating Tesla's Battery Range Is One Reason. 2 min read"                                                        
+[56] "Dow climbs over 200 points as stocks rally ahead of August inflation reading4 min read"                                                      
+[57] "Elon Musk’s ex is selling college photos and a signed birthday card from the billionaire to help pay her stepson’s college tuition3 min read"
+[58] "Consumers expect prices to keeping cooling — but the damage may have already been done3 min read"                                            
+[59] "Manhattan Luxury Housing ‘Looks as Choppy as the Stock Market’1 min read"                                                                    
+[60] "Live Like Vice President Kamala Harris in This Washington, D.C., Condo&nbsp;3 min read"                                                           
+[61] "Every House Is an Opportunity to Learn and Push the Design Envelope Further, Says Thomas A. Kligerman6 min read"                             
+[62] "20 Minutes With: Ponant Cruises’ Mathieu Petiteau6 min read"                                                                                 
+[63] "Record Deals: Inside the Music Royalty BoomLong read"                                                                                        
+[64] "From Modernist Designs to Fabulous Kitchens—Whatever Floats Your Houseboat5 min read"                                                        
+[65] "Do Solar Panels Increase a Home’s Value?"                                                                                                    
+[66] "An Engaged Couple Looks to Clean Up Their Finances. An Adviser Tells Them How.4 min read"                                                    
+[67] "Financial Apps Lure Savers With Chance to Enter Regular Sweepstakes5 min read"                                                               </code></pre>
+</div>
+</div>
+</section>
+<section id="new-york-times" class="level2">
+<h2 class="anchored" data-anchor-id="new-york-times">New York Times</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://www.nytimes.com/section/todayspaper?redirect_uri=https%3A%2F%2Fwww.nytimes.com%2F"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".e1b0gigc0 , .e1hr934v1"</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>(nytimes <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Ukraine Routs Russian Forces in Northeast, Forcing a Retreat"                      
+ [2] "Russia’s Retreat in Ukraine Pokes Holes in Putin’s Projection of Force"            
+ [3] "Monkeypox Shots, Treatments and Tests Are Unavailable in Much of the World"        
+ [4] "Expanded Safety Net Drives Sharp Drop in Child Poverty"                            
+ [5] "With Queen Gone, Former Colonies Find a Moment to Rethink Lasting Ties"            
+ [6] "In Atlanta, a Local Prosecutor Takes on Murder, Street Gangs and a President"      
+ [7] "Carlos Alcaraz Wins U.S. Open Men’s Singles Title, and Becomes No. 1"              
+ [8] "‘Very Dire’: Devastated by Floods, Pakistan Faces Looming Food Crisis"             
+ [9] "Chinese Drones: The Latest Irritant Buzzing Taiwan’s Defenses"                     
+[10] "So You Wanted to Get Work Done at the Office?"                                     
+[11] "At Corporate Pep Rally, Disney C.E.O. Pitches Warmer, Fuzzier Side"                
+[12] "Marking 9/11, Biden Remembers the ‘Precious Lives Stolen From Us’"                 
+[13] "A Brief Reprieve in California’s Raging Wildfire Fight"                            
+[14] "Finding Humor, and Humanity, in Canada’s Oil Fields"                               
+[15] "After Decades of Silence, Art About Abortion (Cautiously) Enters the Establishment"
+[16] "Lars Vogt, Acclaimed Pianist and Conductor, Is Dead at 51"                         
+[17] "In Lieu of Revenge, Baker Mayfield Is Humbled Again by the Browns"                 
+[18] "Chinese Drones: The Latest Irritant Buzzing Taiwan’s Defenses"                     
+[19] "Queen’s Ties to Scotland Add New Wrinkle to Push for Independence"                 
+[20] "‘Very Dire’: Devastated by Floods, Pakistan Faces Looming Food Crisis"             
+[21] "Marking 9/11, Biden Remembers the ‘Precious Lives Stolen From Us’"                 
+[22] "A Brief Reprieve in California’s Raging Wildfire Fight"                            
+[23] "N.Y. State Vote Could Raise Pressure on Officials Over Hasidic Schools"            
+[24] "Lars Vogt, Acclaimed Pianist and Conductor, Is Dead at 51"                         
+[25] "Tina Ramirez, Founder of a Leading Hispanic Dance Troupe, Dies at 92"              
+[26] "James Stewart Polshek, Quiet Giant of Modern Architecture, Dies at 92"             
+[27] "Your Childhood Home Is in Front of You. Do You Go In?"                             
+[28] "My Family Fought the British Empire. I Reject Its Myths."                          
+[29] "How to Argue Well"                                                                 
+[30] "So You Wanted to Get Work Done at the Office?"                                     
+[31] "When Teens Find Misinformation, These Teachers Are Ready"                          
+[32] "At Corporate Pep Rally, Disney C.E.O. Pitches Warmer, Fuzzier Side"                
+[33] "Carlos Alcaraz Wins U.S. Open Men’s Singles Title, and Becomes No. 1"              
+[34] "The Broncos Will Be Good Because Russell Wilson Said So"                           
+[35] "In Lieu of Revenge, Baker Mayfield Is Humbled Again by the Browns"                 
+[36] "Finding Humor, and Humanity, in Canada’s Oil Fields"                               
+[37] "Review: In ‘Antony and Cleopatra,’ John Adams Goes Conventional"                   
+[38] "After Decades of Silence, Art About Abortion (Cautiously) Enters the Establishment"
+[39] "Quotation of the Day: Queen’s Scottish Ties Muddle Push for Independence"          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#nytimes &lt;- as.data.frame(nytimes)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#View(nytimes)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="financial-times" class="level2">
+<h2 class="anchored" data-anchor-id="financial-times">Financial Times</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://ft.com"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".headline--scale-3 , .stacked-secondary-story--row-stack-2 .headline--scale-2 , .text--weight-400 , .headline--scale-7"</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>(ft <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Russia to press on ‘until all the goals’ achieved in Ukraine, says Kremlin"                                   
+ [2] "News in-depth. Ukraine’s advance boosts calls for more western weapons"                                       
+ [3] "King Charles III vows to uphold ‘precious principles’ of UK democracy"                                        
+ [4] "Editor's picks"                                                                                               
+ [5] "opinion content.&nbsp;Who will pay for the shift from efficiency to resilience?"                                   
+ [6] "News in-depth. EY’s challenge just beginning after leaders sign off on historic split"                        
+ [7] "Live news: US consumer inflation expectations ease in August, NY Fed says"                                    
+ [8] "Germany outlines aim to become Europe’s leading military force"                                               
+ [9] "Media"                                                                                                        
+[10] "Interview. Dan Loeb pulls back from call for Disney to spin off ESPN"                                         
+[11] "Wall Street jobs"                                                                                             
+[12] "Goldman plans round of lay-offs as dealmaking dries up"                                                       
+[13] "The Merge: a blockchain revolution or just more hype?"                                                        
+[14] "US criticised for rolling out Covid boosters without human trials"                                            
+[15] "Person in the News. King Charles III, a life-long apprentice steps into the spotlight"                        
+[16] "The Henry Mance Interview. Sabine Weyand: ‘The EU found out we are dependent on Russia. We can’t afford that’"
+[17] "Sabine Weyand: ‘The EU found out we are dependent on Russia. We can’t afford that’"                           
+[18] "Anti-immigrant Sweden Democrats celebrate election gains"                                                     
+[19] "Arki Busson’s LumRisk suffers exodus of senior staff"                                                         
+[20] "Brussels offers to reduce Northern Ireland border checks"                                                     
+[21] "FT Global Masters in Management Ranking 2022: Europe dominates"                                               
+[22] "FT Global Masters in Management Ranking 2022: Europe dominates"                                               
+[23] "News in-depth. UK economy stagnates as cost of living crisis hits spending"                                   
+[24] "Electrolux warns on profits as inflation hits demand for appliances"                                          
+[25] "Interview. Indonesia’s president Widodo to consider ‘all options’ on Russian oil"                             
+[26] "Ukraine’s war economy urgently needs more international support"                                              
+[27] "opinion content.&nbsp;Don’t be indispensable at work — it’s a terrible trap"                                       
+[28] "King Charles and the royal finances"                                                                          
+[29] "The legacy of Queen Elizabeth II"                                                                             
+[30] "In memory of Queen Elizabeth II"                                                                              
+[31] "How Italy is facing a crucial election"                                                                       
+[32] "September — a cosmic-disco celebration of love and happiness"                                                 
+[33] "Cuff love: inside Charvet, the original Parisian shirtmaker"                                                  
+[34] "Best new books on climate and the environment"                                                                
+[35] "The best of TV and streaming this week"                                                                       
+[36] "Fine Gorilla Person podcast explores how a science project went ape"                                          
+[37] "13 min"                                                                                                       
+[38] "Queen Elizabeth II: a long life of duty and service"                                                          
+[39] "24 min"                                                                                                       
+[40] "How Putin held Europe hostage over energy"                                                                    
+[41] "20 min"                                                                                                       
+[42] "'Why we need a wealth tax'"                                                                                   
+[43] "13 min"                                                                                                       
+[44] "China's unseen war for strategic influence"                                                                   </code></pre>
+</div>
+</div>
+</section>
+<section id="globe-and-mail" class="level2">
+<h2 class="anchored" data-anchor-id="globe-and-mail">Globe and Mail</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://www.theglobeandmail.com/canada/"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".c-card__hed"</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>(globeandmail <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Government numbers exaggerate improvement in on-time flight departures in late August, industry experts say  Subscriber content"       
+ [2] "Canadians’ wealth suffers biggest drop on record as markets, real estate swoon  Subscriber content"                                    
+ [3] "Insurers, others on front lines of adapting to climate change sound alarm on Canada’s ‘vague and distant’ strategy  Subscriber content"
+ [4] "Ontario opens bivalent vaccine bookings for most vulnerable  Subscriber content"                                                       
+ [5] "Canada to be ‘prominent’ at Queen’s lying in state and funeral: diplomat  Subscriber content"                                          
+ [6] "Thirty-one-year-old man faces first-degree murder charge in death of rapper Pat Stay  Subscriber content"                              
+ [7] "Poilievre calls for tax-hike freeze in first caucus speech since winning Conservative leadership  Subscriber content"                  
+ [8] "Ontario Premier Doug Ford, lieutenant governor to proclaim accession of King Charles III today   Subscriber content"                   
+ [9] "Simple fixes won’t bring lasting change to Thunder Bay police, report says"                                                            
+[10] "Three people injured after shooting inside Toronto nightclub, police say"                                                              
+[11] "Shot fired at Toronto music festival, no injuries reported, police say"                                                                
+[12] "Passengers stuck on GO trains for hours after on-track fatality"                                                                       
+[13] "Wildfire smoke continues to blanket parts of B.C., improves slightly over Vancouver"                                                   
+[14] "Federal loan of $1.4-billion key to keeping Indigenous development all rentals, co-developer says"                                     
+[15] "Air quality advisory issued due to B.C., U.S. wildfires and blaze in Vancouver"                                                        
+[16] "B.C. man convicted in young girl’s murder in 1978 loses appeal"                                                                        
+[17] "Wildfire in B.C.’s Peace region doubles, no rain expected for relief"                                                                  
+[18] "Scientists investigating deaths of giant sturgeon in B.C.’s Nechako River  Subscriber content"                                         
+[19] "Federal Heritage minister says Legault dividing Quebecers on immigration"                                                              
+[20] "Four things from Pierre Poilievre’s first night as Conservative leader   Subscriber content"                                           
+[21] "Pierre Poilievre’s win unlikely to alter Quebec political landscape, province’s Liberal MPs, ministers say"                            
+[22] "Lessons were learned from Nova Scotia mass shooting, RCMP deputy commissioner says"                                                    
+[23] "Senior RCMP officer pushed to keep secret safety bulletin on Nova Scotia killer a month before mass shooting"                          
+[24] "Staffing shortages, more complex disease pushing up surgery wait times in Nova Scotia  Subscriber content"                             
+[25] "Airdrie house sells at a premium as Calgary market tightens"                                                                           
+[26] "Western Canada: In Queen Elizabeth’s passing, we see our own reflection"                                                               
+[27] "The UCP leadership race has turned into a referendum on Danielle Smith’s sovereignty act  Subscriber content"                          
+[28] "Online food delivery business Skip The Dishes lays off approximately 350 employees in Winnipeg  Subscriber content"                    
+[29] "RCMP locate vehicle they believe was used by suspect after Saskatchewan stabbing rampage"                                              
+[30] "‘We’ve got to protect our community,’ says James Smith Cree Nation chief after Saskatchewan stabbing rampage"                          
+[31] "Dispute over proposed development near Caledonia and Six Nations returns to court"                                                     
+[32] "Globe Climate: As temperatures rise, so does risk to athlete health"                                                                   
+[33] "Constitutional challenge of Ontario’s wage-cap bill begins in court  Subscriber content"                                               
+[34] "Western University students complete training on sexual violence prevention as condition of acceptance"                                
+[35] "Morning Update: Ukraine forces push further in Kharkiv region as Russia scatters in chaotic retreat   Subscriber content"              
+[36] "In Victoria, mourning Queen Elizabeth takes many forms – flowers, condolences, a martini at the Empress"                               
+[37] "Ontario court to hear arguments in climate lawsuit launched by youth activists"                                                        
+[38] "Swedish right opposition inches ahead in election cliff-hanger  Subscriber content"                                                    
+[39] "Pierre Poilievre’s Conservative leadership win looms on campaign trail in Quebec   Subscriber content"                                 
+[40] "Police investigate after two bodies found in Toronto home following well-being check"                                                  
+[41] "In Quebec, the Queen’s death raises questions about future of the monarchy in Canada"                                                  
+[42] "Police announce charges in death of young B.C. mom killed five years ago"                                                              
+[43] "CAQ campaign promises would add $6 billion to province’s deficit  Subscriber content"                                                  
+[44] "Green Party president resigns amid internal turmoil, saying her ‘optimism has died’"                                                   
+[45] "Two dead, including paramedic, in ambulance crash near Edmonton"                                                                       
+[46] "King Charles III becomes King of Canada    2:25"                                                                                       
+[47] "The Conservative party uses ranked ballots for leadership races. Here’s how it works"                                                  
+[48] "Trudeau signs book of condolences for Queen at Rideau Hall    0:56"                                                                    
+[49] "King Charles III proclaimed Canada’s new head of state in ceremony at Rideau Hall"                                                     
+[50] "Conservative Party of Canada to announce its next leader tonight"                                                                      
+[51] "How Queen Elizabeth’s death affects Canada’s courts"                                                                                   
+[52] "Toronto’s ravines are in a critical state, threatened by invasive species, climate change and intensive land development"              
+[53] "First Nations leaders call for reboot of RCMP policing in Saskatchewan after stabbing rampage"                                         
+[54] "The housing crisis in Canmore, Alta., is driving out doctors, families and development"                                                
+[55] "Olympic race walker Evan Dunfee hopes to take lessons of success on the track into local politics"                                     </code></pre>
+</div>
+</div>
+</section>
+<section id="vancouver-sun" class="level2">
+<h2 class="anchored" data-anchor-id="vancouver-sun">Vancouver Sun</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://vancouversun.com/"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".article-card__headline-clamp"</span> <span class="co"># The element ID , I recommend SelectorGadget if you're not familiar with CSS selectors</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># Should the functionbest clean the extracted vector or not ? Default is FALSE</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>(vancouversun <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Metro Vancouver air quality warning extended as nearby wildfires grow"                                                                         
+ [2] "GranFondo organizers apologize after supplies run out during Vancouver to Whistler bike race"                                                  
+ [3] "Daphne Bramham: Japan's bribery scandal adds fuel and fire to Vancouver's 2030 Olympic bid"                                                    
+ [4] "The Queen's lingerie was made by the parents of a Vancouver woman, with the help of silkworms"                                                 
+ [5] "Review: Five take-aways from opening night of Gorillaz North American tour in Vancouver"                                                       
+ [6] "B.C. Liberals victory in South Surrey byelection a vote of confidence in leader Kevin Falcon: political scientist"                             
+ [7] "Wildfire smoke continues to blanket parts of B.C."                                                                                             
+ [8] "B.C. river mystery: What is killing the giant sturgeon of Nechako River?"                                                                      
+ [9] "Pedestrian injured in Surrey hit-and-run"                                                                                                      
+[10] "Ian Mulgrew: Time to evaluate City of Vancouver fentanyl tax uses"                                                                             
+[11] "Metro Vancouver air quality warning extended as nearby wildfires grow"                                                                         
+[12] "GranFondo organizers apologize after supplies run out during Vancouver to Whistler bike race"                                                  
+[13] "Daphne Bramham: Japan's bribery scandal adds fuel and fire to Vancouver's 2030 Olympic bid"                                                    
+[14] "The Queen's lingerie was made by the parents of a Vancouver woman, with the help of silkworms"                                                 
+[15] "From immigrant background to two-person wedding, Anaida Poilievre a distinct Tory wife"                                                        
+[16] "From immigrant background to two-person wedding, Anaida Poilievre a distinct Tory wife"                                                        
+[17] "Prince Harry pays tribute to 'granny' Queen Elizabeth"                                                                                         
+[18] "Queen Elizabeth's coffin taken through Edinburgh in solemn procession"                                                                         
+[19] "Wave of young voters flocking to Poilievre surprised even campaign insiders"                                                                   
+[20] "Canada's military will overhaul its recruitment process, general says"                                                                         
+[21] "Real estate holdings drop by record $322 billion in Canada"                                                                                    
+[22] "Canada's real problem isn't job losses, it's the rush to retire"                                                                               
+[23] "Five things to watch for in the Canadian business world in the coming week"                                                                    
+[24] "In the return to office, workers won't give up life-changing flexibility without a fight"                                                      
+[25] "Canada steps up efforts to prevent African swine fever from devastating the pork industry"                                                     
+[26] "True Crime Byline: ‘As a group they were dismissed’: Oppal calls for changes to improve treatment of vulnerable women"                         
+[27] "True Crime Byline: Police still on hunt for Robert Pickton-linked Jane Doe's real name"                                                        
+[28] "True Crime Byline: Damning evidence excluded; details supporting 20 more murder charges against Pickton relegated to trial that never happened"
+[29] "The Castleton Massacre: Account of 1960s femicide honours victims"                                                                             
+[30] "True Crime Byline: A sister still lost, Dianne Rock was one of 20 women Robert Pickton stands accused of killing"                              
+[31] "Rupa Subramanya: The best critique of the World Economic Forum came from Chrystia Freeland herself"                                            
+[32] "Chris Selley: Pierre Poilievre won easily. He can easily win again."                                                                           
+[33] "MacDougall: With Pierre Poilievre as leader, the party finally goes 'full-fat' conservative"                                                   
+[34] "GUNTER: Here's the real problem with the Bank of Canada"                                                                                       
+[35] "Peter McKnight: Involuntary treatment after multiple overdoses isn't the answer"                                                               
+[36] "Young Stars: Canucks looking at a diminutive forward with a familiar name"                                                                     
+[37] "The top 5 Vancouver Canucks prospects to track this season"                                                                                    
+[38] "Canada, U.S. bringing women's hockey rivalry to B.C. in November"                                                                              
+[39] "Between the Lines: Clearly, obviously the Whitecaps got shafted"                                                                               
+[40] "Carlos Alcaraz wins U.S. Open for first Slam title, top ranking"                                                                               
+[41] "Q&amp;A: The Cult are back to having fun on Under the Midnight Sun"                                                                                
+[42] "'Squid Game,' 'Succession,' 'Ted Lasso' vie for Emmy Awards"                                                                                   
+[43] "Must-see TV: Netflix's Do Revenge and the return of Dragons' Den top this week's watch list"                                                   
+[44] "'Barbarian' director Zach Cregger on crafting the year's scariest (and wackiest) horror movie"                                                 
+[45] "Cate Blanchett, Colin Farrell win acting honors at Venice Film Festival"                                                                       
+[46] "Fitness: Here's how you can get more muscle in less time"                                                                                      
+[47] "Juhl: Is your teenager drinking too much coffee?"                                                                                              
+[48] "Makeover: A sensible solution to brittle and dry hair"                                                                                         
+[49] "Anthony Gismondi: 2022 wine harvest will go down to the wire in B.C."                                                                          
+[50] "Jane MacDougall: In service of a greater good"                                                                                                 
+[51] "Sold (Bought): Breathtaking vistas elevate Coal Harbour sub-penthouse"                                                                         
+[52] "Brian Minter: Available now, please give Bud Bloomers heathers a try"                                                                          
+[53] "IDS Vancouver: Design for a different world"                                                                                                   
+[54] "The Home Front: Paolo Ferrari’s latest collection built for everyday living"                                                                   
+[55] "Condo Smarts: Electric vehicle charging in complex properties"                                                                                 
+[56] "Hotel Intel: Canadians get credit at Adirondacks' Saranac Waterfront Lodge"                                                                    
+[57] "Exploring LA's art scene"                                                                                                                      
+[58] "Tucson: the Southwest’s desert hot spot"                                                                                                       
+[59] "Checking In: The Douglas"                                                                                                                      
+[60] "Haida Gwaii: A majestic jewel of B.C."                                                                                                         
+[61] "Climate change is worsening Canadian roads, but Alberta oil may be the answer"                                                                 
+[62] "2023 Lincoln Corsair gets styling refresh, advanced features"                                                                                  
+[63] "First Look: 2023 Pagani Utopia"                                                                                                                
+[64] "2022 Tesla Model Y impresses in Euro NCAP safety tests"                                                                                        
+[65] "How U.S. regulators allow ethanol plants to pollute more than oil refineries"                                                                  
+[66] "Is immunotherapy the answer to conquering skin cancer?"                                                                                        
+[67] "A system 'in crisis': When you call 911, someone should come"                                                                                  
+[68] "A second person has died in the U.S. after contacting monkeypox; officials"                                                                    
+[69] "Half of Canadians can't get a doctors' appointment"                                                                                            
+[70] "'Peppa Pig' introduces same-sex couple amid criticism of Lightyear lesbian kiss"                                                               
+[71] "Cannabis advocate and professional fighter Elias Theodorou dies at 34"                                                                         
+[72] "Ontario seniors nabbed after police suss out $5 million cannabis butane oil lab"                                                               
+[73] "Nick Kyrgios is not the only one who complained about the smell of weed at the U.S. Open"                                                      
+[74] "Cannabis survey offers $20 to territorial residents who take part"                                                                             
+[75] "Man tries to eat bag of cannabis while in police custody"                                                                                      </code></pre>
+</div>
+</div>
+</section>
+<section id="financial-post" class="level2">
+<h2 class="anchored" data-anchor-id="financial-post">Financial Post</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_link <span class="ot">&lt;-</span> <span class="st">"https://financialpost.com/category/news/"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>my_node <span class="ot">&lt;-</span> <span class="st">".article-card__headline-clamp"</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>(financialpost <span class="ot">&lt;-</span> <span class="fu">scrap</span>(<span class="at">link =</span> my_link, <span class="at">node =</span> my_node, <span class="at">clean =</span> clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Household debt ratio up in second quarter: Statistics Canada"                                    
+ [2] "Wages key to pace of Bank of Canada's remaining rate hikes"                                      
+ [3] "Canada's real problem isn't job losses, it's the rush to retire"                                 
+ [4] "Pierre Poilievre elected new leader of the Conservative Party of Canada"                         
+ [5] "What the Bank of Canada's latest rate hike means for homebuyers"                                 
+ [6] "Four videos that tell you all you need to know about the Bank of Canada's interest rate hike"    
+ [7] "Bank of Canada may have to hike higher than the Fed"                                             
+ [8] "Dollarama boosts outlook as inflation drives bargain-hunters to its stores"                      
+ [9] "Indigo's new CEO Peter Ruis hopes to make retailer 'bigger and bolder'"                          
+[10] "Canada's economy loses 40,000 jobs; unemployment rate jumps to 5.4%"                             
+[11] "Canada's crumbling roads are getting worse in climate change — but Alberta oil may be the answer"
+[12] "Canada's real problem isn't job losses, it's the rush to retire"                                 
+[13] "Restaurant finds itself in hot water with CRA over servers' electronic tips"                     
+[14] "Dying with zero. More Canadians gifting inheritance early and enjoying money now"                
+[15] "Wages key to pace of Bank of Canada's remaining rate hikes"                                      
+[16] "Grocers gear up to fight fed decision to include compostable bags in plastics ban"               
+[17] "Dollarama beats estimates and boosts sales forecast as affluent seek bargains"                   
+[18] "Shopify names new CFO, COO in shakeup of executive ranks"                                        
+[19] "Vancouver-based Equinox Gold suspends its biggest mine over fresh blockade"                      
+[20] "Ottawa to hike GST rebates, help with rent payments in new affordability plan"                   
+[21] "What happens to our bills and coins now that the Queen has died?"                                
+[22] "Bank of Canada rate seen hitting 4% or higher"                                                   
+[23] "Air Transat loss narrows as sales head toward pre-pandemic levels: What to know"                 
+[24] "Bank of Canada's Carolyn Rogers says inflation won't come down overnight"                        
+[25] "Big bank CEOs see soft landing with pandemic relief acting as 'shock absorber'"                  
+[26] "ECB hikes rates by record 75 basis points to tame inflation"                                     
+[27] "Bank of Canada raises rate 75 bps and signals more hikes to come"                                
+[28] "Cineplex says it's still focused on collecting damages from Cineworld despite bankruptcy"        
+[29] "Developed economies feeling U.S. dollar pain in an emerging market way"                          
+[30] "Canada's top telecoms agree to support each other during outages — minister"                     </code></pre>
+</div>
+</div>
+<p>Yes, reading headlines from various newspapers gives me a very good sense of what’s happening around the world. It also helps me identify which news I should look into further when I open a newspaper website.</p>
+<p>“Early in life I had noticed that no event is ever correctly reported in a newspaper.” George Orwell</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
