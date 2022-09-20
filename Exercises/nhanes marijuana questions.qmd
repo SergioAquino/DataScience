@@ -1,0 +1,183 @@
+---
+title: "NHANES - Ever used marijuana or hashish"
+author: "Sergio Aquino"
+format: html
+editor: visual
+---
+
+## NHANES: Marijuana Questions
+
+
+
+This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e
+SAGE Publishing, 2021
+
+## Libraries
+
+```{r}
+#| echo: false
+library(tidyverse)
+```
+
+## Import nhanes2013 via environment and check file
+
+```{r}
+nhanes <- nhanes_2013_ch1
+dim(nhanes)
+summary(nhanes)
+```
+
+## Subset nhanes1 without NA's and plot variables
+
+The variable DUQ200 corresponds to the values below. 1991 respondents have used marijuana and 1699 haven't.
+
+## [![NHANES DUQ200](images/DUQ200.png)](https://www.cdc.gov/nchs/nhanes/index.htm)
+
+The plots below show that the age distribution of the respondents is even (RIDAGEYR) and the gender distribution is balanced between men and women (RIAGENDR).
+
+```{r}
+nhanes1 <- nhanes %>% 
+  drop_na() %>%
+  filter(DUQ200 < 3) %>% 
+  mutate(DUQ200 = ifelse(DUQ200 == 1 ,"Yes","No"))
+  
+dim(nhanes1)
+
+table(nhanes$DUQ200)
+hist(nhanes1$RIDAGEYR)
+hist(nhanes1$RIAGENDR)
+```
+
+## Create a barchart showing the NHNES percentage of yes and no
+
+```{r}
+nhanes.bar <- nhanes1 %>%
+  ggplot(aes(x = DUQ200,
+             y = 100 * (..count..) / sum(..count..),
+             fill = DUQ200)) +
+  geom_bar() +
+  theme_minimal() +
+  scale_fill_manual(values = c("#78A678", '#7463AC')) +
+  labs(title = "Percentage of NHANES Participants Saying Yes or No to Marijuana Use",
+       subtitle = "NHANES 2013-2014",
+       x = "Tried Marijuana?",
+       y = "Percent of responses") +
+  theme(legend.position="none")
+
+nhanes.bar
+```
+## Recode age in 4 buckets
+
+```{r}
+nhanes2 <- nhanes1 %>%
+  mutate(age.cat = cut(
+    x = RIDAGEYR,
+    breaks = c(-Inf, 29, 39, 49, Inf),
+    labels = c("18-29", "30 - 39", "40 - 49", "50 - 59")
+  )) 
+```
+
+## Create a barchart of marijuana use by age group
+
+```{r}
+nhanes.bar2 <- nhanes2 %>%
+  filter(DUQ200 == "Yes") %>% 
+  ggplot(aes(x = age.cat,
+             y = 100 * (..count..) / sum(..count..),
+             fill = age.cat)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Percentage of Age Group Saying Yes to Marijuana Use",
+       subtitle = "NHANES 2013-2014",
+       x = "Tried Marijuana",
+       y = "Percent of responses") +
+  theme(legend.position="none")
+
+nhanes.bar2
+```
+
+## Bar chart of marijuana use by age group and sex
+
+```{r}
+nhanes3 <- nhanes2 %>%
+  mutate(RIDAGEYR = as.numeric(RIDAGEYR)) %>%
+  mutate(age.cat = cut(
+    x = RIDAGEYR,
+    breaks = c(-Inf, 29, 39, 49, Inf),
+    labels = c("18-29", "30 - 39", "40 - 49", "50 - 59")
+  )) %>% 
+  mutate(gender = if_else(RIAGENDR==1, "Male", "Female")) %>%
+  mutate(gender = as.factor(gender)) %>% 
+  group_by(DUQ200, age.cat) %>%
+  count() %>% 
+  group_by(age.cat) %>%
+  mutate(perc.age = 100*n/sum(n))
+  
+```
+
+```{r}
+nhanes3 %>%
+  ggplot(aes(x = age.cat, fill = DUQ200,
+             y = perc.age)) +
+  geom_col(position = 'dodge') +
+  theme_minimal() +
+  scale_fill_manual(values = c("#78A678", '#7463AC'),
+                    name = "Ever tried\nmarijuana?") +
+  labs(
+    title = "Percentage of Age Group Saying Yes or No to Marijuana Use",
+    subtitle = "NHANES 2013-2014",
+    x = "Age group (in years)",
+    y = "Percent of responses in age group"
+  )
+```
+
+
+
+
+
+
+```{r}
+nhanes3 <- nhanes1 %>%
+  mutate(RIDAGEYR = as.numeric(RIDAGEYR)) %>%
+  mutate(age.cat = cut(
+    x = RIDAGEYR,
+    breaks = c(-Inf, 29, 39, 49, Inf),
+    labels = c("18-29", "30 - 39", "40 - 49", "50 - 59")
+  )) %>% 
+  mutate(gender = if_else(RIAGENDR==1, "Male", "Female")) %>%
+  mutate(gender = as.factor(gender)) %>%
+  group_by(grass, age.cat) %>%
+  count() %>%
+  group_by(age.cat) %>%
+  mutate(perc.grass = 100*n/sum(n))
+  ggplot(aes(x = age.cat, 
+             y = 100 * (..count..) / sum(..count..),
+             fill = gender )) +
+  geom_col(position = 'dodge') +
+  theme_minimal() +
+  labs(x = "Age group (in years)",
+       y = "Percent of responses in age group")
+
+nhanes3
+#100 * (..count..) / sum(..count..)
+```
+
+##
+no
+```{r}
+nhanes.bar3 <- nhanes2 %>%
+  ggplot(aes(x = age.cat,
+             y = 100 * (..count..) / sum(..count..),
+             fill = age.cat,
+             )) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Percentage of Age Group Saying Yes or No to Marijuana Use",
+       subtitle = "NHANES 2013-2014",
+       x = "Tried Marijuana",
+       y = "Percent of responses") +
+  theme(legend.position="none")
+
+nhanes.bar3
+```
+
