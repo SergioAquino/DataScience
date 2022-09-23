@@ -1,0 +1,366 @@
+---
+title: "BFRSS - Transgender questions"
+author: "Sergio Aquino"
+format: html
+editor: visual
+---
+
+## Transgender
+
+A common definition of the word transgender is that they are people who have a gender identity or gender expression that differs from the sex that they were assigned at birth. However, the term transgender does not have a universally accepted definition, including among researchers.
+
+This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e SAGE Publishing, 2021.
+
+## The BRFSS
+
+The Behavioral Risk Factor Surveillance System (BRFSS) is a United States health survey that looks at behavioral risk factors. Begun in 1984, the BRFSS is run by Centers for Disease Control and Prevention (CDC ) and conducted by participating individual state health departments. The survey is administered by telephone and is the world's largest such survey. In 2009, the BRFSS began conducting surveys by cellular phone in addition to traditional "landline" telephones.
+
+In addition to all 50 states, the BRFSS is also conducted by health departments in The District of Columbia, Guam, Puerto Rico, and the U.S. Virgin Islands. Individual states can add their own questions to the survey instrument, which consists of a core set of questions on certain topics like car safety, obesity, or exercise.
+
+In 2014, CDC introduced an optional Sexual Orientation and Gender Identity module for the BRFSS.
+
+## Libraries
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+library(tidyverse)
+library(here)
+library(descr)
+library(tableone)
+library(semTools)
+```
+
+## Import transgender file with demographics
+
+```{r}
+bfrss_trans <- read_csv(here("Exercises","data","transgender_hc_ch2.csv"))
+
+dim(bfrss_trans)
+summary(bfrss_trans)
+```
+
+## Objective of the analysis
+
+The report will analyze transgender responses in the 2014 BFRSS. The main variables are transgender, age, race, income, education categories, and physical health. The analysis will be mostly descriptive.
+
+## Initial columns
+
+We'll focus on the first 3 transgender replies:
+
+1 = Male to female 2 = Female to male 3 = Gender non-conforming
+
+![](images/TRNSGNDR.png)
+
+Here are codebook extracts for the other variables:
+
+![](images/AGEG5YR.png)
+
+![](images/RACE.png)
+
+![](images/INCOMG.png)
+
+![](images/EDUCAG.png)
+
+![](images/HLTHPLN1.png)
+
+![](images/HADMAN.png)
+
+![](images/AGE80.png)
+
+![](images/PHYSHLTH.png)
+
+## Transgender groups and their frequencies
+
+```{r}
+ bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) 
+
+descr::freq(x = bfrss_trans1$TRNSGNDR, plot = FALSE)
+```
+
+Gender variance or gender nonconformity is behavior or gender expression by an individual that does not match masculine or feminine gender norms.
+
+## Female to male transgender and mammography
+
+```{r}
+bfrss_trans_hadmam <- bfrss_trans1 %>% 
+  filter(TRNSGNDR == 'Female to male') %>%
+  #filter(X_AGEG5YR %in% c(5)) %>% 
+  filter(HADMAM %in% c(1,2)) %>%
+  mutate(HADMAM = recode_factor(.x = HADMAM,
+                                 `1` = 'Yes',
+                                 `2` = 'No',
+                                   )) 
+
+descr::freq(x = bfrss_trans_hadmam$HADMAM, plot = FALSE)
+```
+
+The question asks if the individual ever had a mammogram and 82.39% of female to male transgenders from 40 to 74 years of age had at least one.
+
+When the focus is on the 40-44 age group, the response rate drops to 69.23%. 
+
+## Physical health
+
+The question was about the number of days in the last 30 days the respondent wasn't feeling good.
+
+```{r}
+bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR < 4) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) %>% 
+  mutate(
+  PHYSHLTH = replace(PHYSHLTH, PHYSHLTH %in% c(77, 99), 99),
+  PHYSHLTH = replace(PHYSHLTH, PHYSHLTH == 88, 0)) %>%
+  filter(PHYSHLTH != 99) 
+
+descr::freq(x = bfrss_trans1$PHYSHLTH, plot = FALSE)
+```
+
+## Physical health: descriptive statistics
+
+With a range from 0 to 30 days of not feeling good, the distribution is skewed to the right and the mean is 6 days. With over half of days with 0 days feeling sick, the median and mode are 0. 
+
+```{r}
+bfrss_trans1 %>% 
+summarise(mean.days = mean(PHYSHLTH, na.rm = TRUE),
+          sd.days = sd(PHYSHLTH, na.rm = TRUE),
+          var.days = var(PHYSHLTH, na.rm = TRUE),
+          median.days = median(PHYSHLTH, na.rm = TRUE),
+          mode.days = names(sort(x = table(PHYSHLTH),
+                                     decreasing = TRUE))[1])
+
+semTools::skew(object = bfrss_trans1$PHYSHLTH)
+```
+
+
+## Age group
+
+The transgender respondents were mostly middle aged.
+
+```{r}
+bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) %>% 
+  filter(X_AGEG5YR != 14) %>% 
+  mutate(
+    X_AGEG5YR = recode_factor(
+      .x = X_AGEG5YR,
+      `1` = '18-24',
+      `2` = '25-29',
+      `3` = '30-34',
+      `4` = '35-39',
+      `5` = '40-44',
+      `6` = '45-49',
+      `7` = '50-54',
+      `8` = '55-59',
+      `9` = '60-64',
+      `10` = '65-69',
+      `11` = '70-74',
+      `12` = '75-79',
+      `13` = '80 or older'
+    ) 
+  ) 
+
+descr::freq(x = bfrss_trans1$X_AGEG5YR, plot = FALSE)
+```
+
+## Health plan
+
+```{r}
+  bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) %>% 
+  filter(HLTHPLN1 %in% c(1,2)) %>%
+  mutate(
+    HLTHPLN1 = recode_factor(
+      .x = HLTHPLN1,
+      `1` = 'Yes',
+      `2` = 'No'
+    )
+  ) 
+
+descr::freq(x = bfrss_trans1$HLTHPLN1, plot = FALSE)
+```
+
+A high percentage of transgenders that responded to the BFRSS have health plan coverage.
+
+## Income group
+
+```{r}
+ bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) %>% 
+  filter(X_INCOMG %in% c(1:5)) %>%
+  mutate(
+    X_INCOMG = recode_factor(
+      .x = X_INCOMG,
+      `1` = 'Less than $15,000',
+      `2` = '$15,000 to less than $25,000',
+      `3` = '$25,000 to less than $35,000',
+      `4` = '$35,000 to less than $50,000',
+      `5` = '$50,000 or more'
+    )
+  )
+
+descr::freq(x = bfrss_trans1$X_INCOMG, plot = FALSE)
+```
+
+## Transgender age group
+
+```{r}
+ bfrss_trans1 <- bfrss_trans %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+  TRNSGNDR = recode_factor(
+      .x =  TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )) %>% 
+  filter(X_AGEG5YR != 14) %>% 
+  mutate(
+    X_AGEG5YR = recode_factor(
+      .x = X_AGEG5YR,
+      `1` = '18-24',
+      `2` = '25-29',
+      `3` = '30-34',
+      `4` = '35-39',
+      `5` = '40-44',
+      `6` = '45-49',
+      `7` = '50-54',
+      `8` = '55-59',
+      `9` = '60-64',
+      `10` = '65-69',
+      `11` = '70-74',
+      `12` = '75-79',
+      `13` = '80 or older'
+    ) 
+  ) 
+
+descr::freq(x = bfrss_trans1$X_AGEG5YR, plot = FALSE)
+```
+
+## Recoding the most important variables
+
+Here we recode transgender, age, age category, race, income, education group, and health plan. The variable related to mammography will be dropped as it has too many NAs and it was already analyzed earlier. Physical health, PHYSHLTH, was also analyzed earlier, and column age, X_AGE80, is redundant.  
+
+```{r}
+
+  bfrss.table <- bfrss_trans %>%
+  select(TRNSGNDR, X_AGEG5YR, X_RACE, X_INCOMG, X_EDUCAG, HLTHPLN1) %>%
+  filter(TRNSGNDR %in% c(1:3)) %>%
+  mutate(
+    TRNSGNDR = recode_factor(
+      .x = TRNSGNDR,
+      `1` = 'Male to female',
+      `2` = 'Female to male',
+      `3` = 'Gender non-conforming',
+    )
+  ) %>%
+  filter(X_AGEG5YR != 14) %>%
+  mutate(
+    X_AGEG5YR = recode_factor(
+      .x = X_AGEG5YR,
+      `1` = '18-24',
+      `2` = '25-29',
+      `3` = '30-34',
+      `4` = '35-39',
+      `5` = '40-44',
+      `6` = '45-49',
+      `7` = '50-54',
+      `8` = '55-59',
+      `9` = '60-64',
+      `10` = '65-69',
+      `11` = '70-74',
+      `12` = '75-79',
+      `13` = '80 or older'
+    )
+  ) %>%
+  filter(X_RACE %in% c(1:6)) %>%
+  mutate(
+    X_RACE = recode_factor(
+      .x = X_RACE,
+      `1` = 'White',
+      `2` = 'Black or African American',
+      `3` = 'Hispanic or Latino',
+      `4` = 'Asian',
+      `5` = 'Native Hawaiian or Other Pacific Islander',
+      `6` = 'American Indian or Alaska Native'
+    )
+  ) %>%
+  filter(X_INCOMG %in% c(1:5)) %>%
+  mutate(
+    X_INCOMG = recode_factor(
+      .x = X_INCOMG,
+      `1` = 'Less than $15,000',
+      `2` = '$15,000 to less than $25,000',
+      `3` = '$25,000 to less than $35,000',
+      `4` = '$35,000 to less than $50,000',
+      `5` = '$50,000 or more'
+    )
+  ) %>%
+  filter(X_EDUCAG %in% c(1:4)) %>%
+  mutate(
+    X_EDUCAG = recode_factor(
+      .x = X_EDUCAG,
+      `1` = 'Did not graduate High School',
+      `2` = 'Graduated High School',
+      `3` = 'Attended College or Technical School',
+      `4` = 'Graduated from College or Technical School'
+    )
+  ) %>%
+  filter(HLTHPLN1 %in% c(1, 2)) %>%
+  mutate(HLTHPLN1 = recode_factor(.x = HLTHPLN1,
+                                  `1` = 'Yes',
+                                  `2` = 'No')) %>% 
+  mutate_all(as.factor)
+
+colnames(bfrss.table) <- c(
+  "Transition status",
+  "Age category",
+  "Race/ethnicity",
+  "Income category",
+  "Education category",
+  "Health insurance"
+)
+  
+```
+
+
+## Create table
+
+```{r}
+CreateTableOne(data = bfrss.table)
+
+```
+
