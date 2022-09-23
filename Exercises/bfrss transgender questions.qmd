@@ -19,7 +19,7 @@ In addition to all 50 states, the BRFSS is also conducted by health departments 
 
 In 2014, CDC introduced an optional Sexual Orientation and Gender Identity module for the BRFSS.
 
-## Libraries
+## Install libraries
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #| echo: false
@@ -41,7 +41,7 @@ summary(bfrss_trans)
 
 ## Objective of the analysis
 
-The report will analyze transgender responses in the 2014 BFRSS. The main variables are transgender, age, race, income, education categories, and physical health. The analysis will be mostly descriptive.
+The report will analyze transgender responses from the 2014 BFRSS. The main variables are transgender, age, race, income, education categories, and physical health. The analysis will be mostly descriptive.
 
 ## Initial columns
 
