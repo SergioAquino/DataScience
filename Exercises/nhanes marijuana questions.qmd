@@ -7,6 +7,8 @@ editor: visual
 
 ## NHANES: Marijuana Questions
 
+The objective of the exercise is to analyze the NHANES 2013-2014 answers related to marijuana or hashish use. 
+
 This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e SAGE Publishing, 2021
 
 ## Libraries
@@ -152,7 +154,6 @@ nhanes3 <- nhanes1 %>%
        y = "Percent of responses in age group")
 
 nhanes3
-#100 * (..count..) / sum(..count..)
 ```
 
 ## 
