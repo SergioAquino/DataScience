@@ -7,10 +7,7 @@ editor: visual
 
 ## NHANES: Marijuana Questions
 
-
-
-This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e
-SAGE Publishing, 2021
+This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e SAGE Publishing, 2021
 
 ## Libraries
 
@@ -66,6 +63,7 @@ nhanes.bar <- nhanes1 %>%
 
 nhanes.bar
 ```
+
 ## Recode age in 4 buckets
 
 ```{r}
@@ -131,11 +129,6 @@ nhanes3 %>%
   )
 ```
 
-
-
-
-
-
 ```{r}
 nhanes3 <- nhanes1 %>%
   mutate(RIDAGEYR = as.numeric(RIDAGEYR)) %>%
@@ -162,8 +155,10 @@ nhanes3
 #100 * (..count..) / sum(..count..)
 ```
 
-##
+## 
+
 no
+
 ```{r}
 nhanes.bar3 <- nhanes2 %>%
   ggplot(aes(x = age.cat,
@@ -180,4 +175,3 @@ nhanes.bar3 <- nhanes2 %>%
 
 nhanes.bar3
 ```
-
