@@ -1,0 +1,208 @@
+---
+title: "NHANES - Gun Use in the United States"
+author: "Sergio Aquino"
+format: html
+editor: visual
+---
+
+## Objective of the analysis
+
+The objective of the exercise is to analyze the NHANES 2011-2012 answers related to gun usage. The variables used are: incime, marital status, and race.
+
+This exercise is based on: Harris, Statistics With R: Solving Problems Using Real-World Data, 1e SAGE Publishing, 2021
+
+## Install libraries
+
+```{r}
+library(tidyverse)
+library(here)
+library(descr)
+library(tableone)
+library(semTools)
+library(RNHANES)
+library(ggmosaic)
+```
+
+## Load data from the 2011-2012 NHANES and save it locally 
+
+```{r}
+gun.usage.nhanes <- nhanes_load_data(file_name = "AUQ_G", year = "2011-2012",demographics = TRUE)
+
+write.csv(gun.usage.nhanes, here("Exercises","data","gun.usage.nhanes.csv"))
+```
+
+## Ever used firearms? 1-Yes,2-No
+
+The number of respondents that have never use a gun is almost twice the number of respondents that have.
+
+```{r}
+descr::freq(gun.usage.nhanes$AUQ300, plot = FALSE)
+
+gun.usage.nhanes %>%
+  filter(AUQ300 %in% c(1,2)) %>% 
+  mutate(AUQ300 = ifelse(AUQ300 == 1 ,"Yes","No")) %>% 
+  ggplot(aes(AUQ300)) +
+    geom_bar() +
+    labs(title = "NHANES Respondents that Have Used a Gun", subtitle = "Number of participants", x = "Ever used a gun?")+
+    theme_light()
+```
+
+## Income breakdown of the respondents that said yes to ever using a gun
+
+Guns are relatively inexpensive. Why do respondents with income '$100,000 and Over' have more experience with guns? 
+
+```{r}
+descr::freq(gun.usage.nhanes$INDFMIN2, plot = FALSE)
+
+gun.usage.nhanes %>%
+  select(AUQ300, INDFMIN2, DMDMARTL, RIDRETH3) %>%
+  filter(AUQ300 == 1 & !(INDFMIN2 %in% c(12, 13, 77, 99))) %>%
+  mutate(
+    INDFMIN2 = recode_factor(
+      .x = INDFMIN2,
+      `1` = '$ 0 to $ 4,999',
+      `2` = '$ 5,000 to $ 9,999',
+      `3` = '$10,000 to $14,999',
+      `4` = '$15,000 to $19,999',
+      `5` = '$20,000 to $24,999',
+      `6` = '$25,000 to $34,999',
+      `7` = '$35,000 to $44,999',
+      `8` = '$45,000 to $54,999',
+      `9` = '$55,000 to $64,999',
+      `10` = '$65,000 to $74,999',
+      `14` = '$75,000 to $99,999',
+      `15` = '$100,000 and Over'
+    )
+  ) %>%
+  drop_na(INDFMIN2) %>%
+  ggplot(aes(INDFMIN2)) +
+  geom_bar() +
+  coord_flip() +
+  labs(title = "Income of the Respondents that Have Used a Gun", subtitle = "Levels of Income", y = "Number of Participants", x="") +
+  theme_light()
+
+```
+
+## Marital status of respondents that have used a gun
+
+Why have married respondents more experience with guns?
+
+```{r}
+descr::freq(gun.usage.nhanes$DMDMARTL, plot = FALSE)
+
+gun.usage.nhanes %>%
+  select(AUQ300, INDFMIN2, DMDMARTL, RIDRETH3) %>%
+  filter(AUQ300 == 1 & DMDMARTL %in% c(1:6)) %>%
+   mutate(
+    DMDMARTL = recode_factor(
+      .x = DMDMARTL,
+      `1` =	'Married',
+      `2` =	'Widowed',
+      `3` =	'Divorced',
+      `4` =	'Separated',
+      `5` =	'Never married'
+    )
+  ) %>%
+  drop_na(DMDMARTL) %>%
+  mutate(DMDMARTL = DMDMARTL %>% fct_infreq()) %>% 
+  ggplot(aes(DMDMARTL)) +
+  geom_bar() +
+  #coord_flip() +
+  labs(
+    title = "Marital status of the Respondents Who Have Used a Gun",
+    subtitle = "NHNES Respondents",
+    y = "Number of Participants",
+    x = ""
+  ) +
+  theme_light()
+```
+
+## Race of the respondents who have used a gun
+
+```{r}
+descr::freq(gun.usage.nhanes$RIDRETH3, plot = FALSE)
+
+gun.usage.nhanes %>%
+  select(AUQ300, INDFMIN2, DMDMARTL, RIDRETH3) %>%
+  filter(RIDRETH3 %in% c(1:6)) %>%
+  mutate(
+    RIDRETH3 = recode_factor(
+      .x = RIDRETH3,
+      `1` =	'Mexican American',
+      `2` =	'Other Hispanic',
+      `3` =	'Non-Hispanic White',
+      `4` =	'Non-Hispanic Black',
+      `6` =	'Non-Hispanic Asian',
+      `7` =	'Other Race - Inclmutate(DMDMARTL = DMDMARTL %>% fct_infreq()) %>% uding Multi-Racial'
+    )
+  ) %>%
+  drop_na(RIDRETH3) %>%
+  mutate(RIDRETH3 = RIDRETH3 %>% 
+           fct_infreq() %>% 
+           fct_rev()) %>%
+  ggplot(aes(RIDRETH3)) +
+  geom_bar(aes(fill = RIDRETH3)) +
+  scale_fill_manual(
+    values = c(
+      "Non-Hispanic White" = "#7463AC",
+      "Non-Hispanic Black" = "gray",
+      "Mexican American" = "gray",
+      "Non-Hispanic Asian" = "gray",
+      "Other Hispanic" = "gray"
+    ),
+    guide = "none"
+  ) +
+  labs(
+    title = "Race of the Respondents Who Have Used a Gun",
+    subtitle = "NHNES Respondents",
+    y = "Number of Participants",
+    x = ""
+  ) +
+  theme_light()
+```
+
+## Income and gun use
+
+```{r}
+gun.usage.nhanes %>%
+  select(AUQ300, INDFMIN2, DMDMARTL, RIDRETH3) %>%
+  filter(AUQ300 %in% c(1,2) & !(INDFMIN2 %in% c(12, 13, 77, 99))) %>%
+  mutate(AUQ300 = ifelse(AUQ300 == 1 ,"Yes","No")) %>%
+  rename(used.gun = AUQ300) %>%
+  mutate(
+    INDFMIN2 = recode_factor(
+      .x = INDFMIN2,
+      `1` = '$ 0 to $ 4,999',
+      `2` = '$ 5,000 to $ 9,999',
+      `3` = '$10,000 to $14,999',
+      `4` = '$15,000 to $19,999',
+      `5` = '$20,000 to $24,999',
+      `6` = '$25,000 to $34,999',
+      `7` = '$35,000 to $44,999',
+      `8` = '$45,000 to $54,999',
+      `9` = '$55,000 to $64,999',
+      `10` = '$65,000 to $74,999',
+      `14` = '$75,000 to $99,999',
+      `15` = '$100,000 and Over'
+    )
+  ) %>%
+  drop_na(INDFMIN2) %>%
+  rename(income = INDFMIN2) %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(used.gun,income), fill = used.gun)) +
+  labs(title = "Income Levels and Gun Use", subtitle = "NHANES 2013", y = "", x="") +
+  guides(fill=guide_legend(title="Used a gun before?")) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  theme_light()
+
+
+```
+
+TBD
+
+##
+
+```{r}
+
+```
+
